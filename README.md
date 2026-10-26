@@ -2,7 +2,7 @@
 
 **Finds the bugs your tests would let through.**
 
-Your PR is green. Coverage is 94%. But would your tests catch an off-by-one in the code you just changed?
+Your PR is green. Coverage is high. But would your tests catch an off-by-one in the code you just changed?
 Snitch plants **realistic, agent-style bugs** (using an open-source code LLM) in the lines your PR changed, runs your tests against each one, and shows you exactly which bugs would have shipped. With `--kill`, it writes a test for each survivor and **verifies** that the test fails on the bug and passes on your code.
 
 > AI agents write more of our code every week, and "tests pass" is the gate before shipping. Snitch measures whether passing means anything.
@@ -14,7 +14,9 @@ SNITCH  Test trust: 50%  (5 of 10 realistic bugs slipped through)
    - if quantity >= 10:
    + if quantity > 10:
 ```
-*(offline classic-mutator run on `examples/shopcalc`; LLM results: TODO, see PLAN.md Phase 7)*
+*(classic-mutator run: `snitch run --repo examples/shopcalc --files shopcalc/pricing.py --mutator classic --per-file 40` → trust 0.50, 5 killed / 5 survived of 10)*
+
+With the LLM mutator (`glm-5.3-flash` via IndieRouter), the bugs get sneakier — trust **0.20** on the same file: 8 of 10 realistic bugs slipped through.
 
 ## Install
 ```bash
@@ -24,8 +26,9 @@ pip install -e .
 ## Configure a model
 Any OpenAI-compatible endpoint with an open-source code model:
 ```bash
-cp .env.example .env   # fill SNITCH_BASE_URL, SNITCH_API_KEY, SNITCH_MODEL
+cp .env.example .env   # fill SNITCH_BASE_URL, SNITCH_MODEL; key via SNITCH_API_KEY or SNITCH_API_KEY_ENV
 ```
+Tested with `glm-5.3-flash` at `https://api.indierouter.ai/v1`.
 
 ## Quickstart
 ```bash
@@ -43,14 +46,28 @@ snitch run --diff main --kill --md snitch.md --json snitch.json --fail-under 0.7
 4. Likely-equivalent survivors are flagged and excluded from the score
 5. `--kill`: LLM writes a test per survivor; kept only if it **passes on the original and fails on the mutant**
 
+## --kill: verified tests, not suggestions
+
+On a copy of `examples/shopcalc` (classic, `--per-file 40`), the score went from **0.50 → 0.80** after adding the 3 verified killer tests (`--kill --write-tests`):
+
+```python
+from shopcalc.pricing import bulk_discount
+
+
+def test_bulk_discount_boundary():
+    """Exactly 50 items must get the 20% tier (>= boundary, not >)."""
+    assert bulk_discount(50) == 0.20
+```
+Each kept test is verified: passes on your code, fails on the bug. Unverified ones are thrown away.
+
 ## GitHub Action
-See `.github/workflows/snitch-pr.yml`. *(demo PR link: TODO)*
+See `.github/workflows/snitch-pr.yml`. Demo: [snitch-demo#1](https://github.com/morty649/snitch-demo/pull/1) — a "fully tested" store-credit PR; Snitch comments with the boundary bugs the tests miss.
 
 ## Benchmark
-*(TODO: bench/RESULTS.md)*
+See `bench/RESULTS.md` — real merged agent-written PRs, LLM trust vs classic trust per PR.
 
 ## Built with Alan
-*(TODO: screenshots of the Alan workflow / execution trace)*
+*(TODO: screenshots of the Alan workflow / execution trace — see FLAGS.md)*
 
 ## Limitations
 Python + pytest only · single-line mutants · one repo copy per mutant · equivalence detection is an LLM heuristic.

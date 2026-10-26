@@ -1,4 +1,6 @@
 repo_url,pr_number,agent,base_sha,head_sha,pr_says_tested,notes
-# Phase 6: fill 8-10 rows of REAL merged PRs written by coding agents (Copilot coding agent, Codex, Claude Code, Devin...).
-# Requirements per row: Python repo, pytest suite that runs in < 60s with `pip install -e .` (or requirements.txt), PR changes non-test .py files.
-# pr_says_tested = yes if the PR description claims tests were added/pass.
+https://github.com/meshtirop1/invoice_generator,5,copilot-swe-agent,01fb9fa39af44f61b7e203db3ce85ecfce3af3cc,be9846e4058255e6f18c1b52c4e170b9ece08d50,yes,"Django invoice app, editable previous-balance + regression tests; needs DB/postgres?"
+https://github.com/mrmatho/shoveler,32,copilot-swe-agent,b48f9aece16fe59a6bd88fff21b08a4648e75a69,feccb46ee6a37acd85ebfba93788bc9f518175f4,yes,"PySide editor, menu move + regression assertion; uv/pyproject"
+https://github.com/simcax/swedan-homeoffice,35,copilot-swe-agent,ef03f26720c39bdb79f37f0c25ff5c3d6bf8fc61,35f58e83454a8c4c8f50e36ad38850805d62e9d0,no,"log_entry month guard + tests; small repo"
+https://github.com/loebpaul/securo,1,copilot-swe-agent,43d48ffb49cecd538cf6ec67a7d059ac180e567e,a36e119f5ca82169d4652aaad90f05062e859145,no,"Loan account-type support; backend py + frontend ts"
+https://github.com/stratos-d/crewchief-assistant,7,human-aided,41ccf250d718c5756339b5aa3476a7047a9db541,bf0b1e1ced572b569e1180f78774b4c3f7839420,no,"remove silence check + tests; small repo"

@@ -24,3 +24,10 @@ Tuning added: edge-case-only guidance, diversity across lines/categories, 3 shor
 - Demo repo: https://github.com/morty649/snitch-demo (main = shopcalc at root + pyproject + snitch.yml workflow)
 - Demo PR: https://github.com/morty649/snitch-demo/pull/1 (branch refund-store-credit, "fully tested" store-credit tier + weak test)
 - Blocked on FLAG-2: SNITCH_API_KEY secret in snitch-demo settings. Will confirm the Snitch PR comment once it lands.
+- CI check on PR #1 fails with exactly `Missing env vars: SNITCH_API_KEY` (workflow itself is fine).
+
+## Phase 7 prep: kill-loop X→Y (Mon Oct 26, copy of shopcalc, classic --per-file 40)
+
+- BEFORE: trust 0.50 (5 killed / 5 survived of 10) — command: `snitch run --repo /tmp/shopcalc_copy --files shopcalc/pricing.py --mutator classic --per-file 40`
+- `--kill --write-tests` produced 3 verified killer tests (boundary day-30 refund, coupon $20 edge, bulk-discount exact-10)
+- AFTER (tests added to the copy): trust 0.80 (8 killed / 2 survived of 10). Honest numbers for README/DEMO.
