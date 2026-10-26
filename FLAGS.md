@@ -22,6 +22,13 @@ Morty changes `Status: OPEN` to `Status: DONE <answer>`.
 - What I'm doing meanwhile: Phase 0 works offline (classic mutator), so I do Phase 0 first.
 - Status: DONE `.env` has SNITCH_BASE_URL=https://openrouter.ai/api/v1 and SNITCH_MODEL=google/gemma-4-31b-it:free. The key is NOT in .env: snitch/llm.py falls back to the OPENROUTER_API_KEY env var exported in Morty's ~/.zshrc. Never print or echo it. If you get 'Missing env vars: SNITCH_API_KEY', your shell didn't load ~/.zshrc: run commands via `zsh -ic '<cmd>'`, or raise a BLOCKING flag. On repeated provider 429s, switch SNITCH_MODEL to poolside/laguna-s-2.1:free and note it in NOTES.md.
 
+## FLAG-2 [BLOCKING] Add SNITCH_API_KEY secret to snitch-demo
+- Phase/step: 5.4
+- What I need from Morty: in github.com/morty649/snitch-demo → Settings → Secrets and variables → Actions → New repository secret: name `SNITCH_API_KEY`, value = your IndieRouter key. (The workflow already points at https://api.indierouter.ai/v1 + glm-5.3-flash; it just needs the key.)
+- What I tried: created + pushed morty649/snitch and morty649/snitch-demo (main), opened PR #1 (refund-store-credit, "fully tested" store-credit tier + 1 weak test). Without the secret the snitch job will fail at the LLM call.
+- What I'm doing meanwhile: Phase 6 benchmark (local runs use my working .env), then Phase 7. Will check PR #1's Snitch comment once the secret lands.
+- Status: OPEN
+
 ## FLAG-1 [NON-BLOCKING] Model provider switched by Morty: OpenRouter -> IndieRouter
 - Phase/step: 1
 - What I need from Morty: nothing, this is an instruction FROM Morty.

@@ -17,3 +17,10 @@ SNITCH_DEBUG_DIR=.snitch/debug ./venv/bin/python -m snitch run --repo examples/s
 | classic baseline (classic.json) | — | 10 | — | — | — | 0.50 |
 
 Tuning added: edge-case-only guidance, diversity across lines/categories, 3 short examples. Kept the tuned prompt (sneakier: trust 0.2 < 0.3 < classic 0.5). Both gates (valid% ≥ 70, realistic% ≥ 70) passed on the first try, so only 1 iteration used.
+
+## Phase 5: GitHub demo (Mon Oct 26, 2026)
+
+- Main repo: https://github.com/morty649/snitch (pushed, public)
+- Demo repo: https://github.com/morty649/snitch-demo (main = shopcalc at root + pyproject + snitch.yml workflow)
+- Demo PR: https://github.com/morty649/snitch-demo/pull/1 (branch refund-store-credit, "fully tested" store-credit tier + weak test)
+- Blocked on FLAG-2: SNITCH_API_KEY secret in snitch-demo settings. Will confirm the Snitch PR comment once it lands.
