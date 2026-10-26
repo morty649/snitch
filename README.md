@@ -61,10 +61,10 @@ def test_bulk_discount_boundary():
 Each kept test is verified: passes on your code, fails on the bug. Unverified ones are thrown away.
 
 ## GitHub Action
-See `.github/workflows/snitch-pr.yml`. Demo: [snitch-demo#1](https://github.com/morty649/snitch-demo/pull/1) — a "fully tested" store-credit PR; Snitch comments with the boundary bugs the tests miss.
+See `.github/workflows/snitch-pr.yml`. Demo: [snitch-demo#1](https://github.com/morty649/snitch-demo/pull/1) — a "fully tested" store-credit PR; Snitch [commented](https://github.com/morty649/snitch-demo/pull/1#issuecomment-6413622196) with trust 50% (1 of 2 realistic bugs slipped through: the day-7 full-refund boundary).
 
 ## Benchmark
-See `bench/RESULTS.md` — real merged agent-written PRs, LLM trust vs classic trust per PR.
+See `bench/RESULTS.md` — 4 real merged copilot-swe-agent PRs: mean LLM trust **0.72** vs classic **0.84**; ≥1 LLM mutant survived in **3 of 4** PRs (33 mutants, 12 survivors).
 
 ## Built with Alan
 *(TODO: screenshots of the Alan workflow / execution trace — see FLAGS.md)*

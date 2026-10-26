@@ -27,7 +27,7 @@ Morty changes `Status: OPEN` to `Status: DONE <answer>`.
 - What I need from Morty: in github.com/morty649/snitch-demo → Settings → Secrets and variables → Actions → New repository secret: name `SNITCH_API_KEY`, value = your IndieRouter key. (The workflow already points at https://api.indierouter.ai/v1 + glm-5.3-flash; it just needs the key.)
 - What I tried: created + pushed morty649/snitch and morty649/snitch-demo (main), opened PR #1 (refund-store-credit, "fully tested" store-credit tier + 1 weak test). Without the secret the snitch job will fail at the LLM call.
 - What I'm doing meanwhile: Phase 6 benchmark (local runs use my working .env), then Phase 7. Will check PR #1's Snitch comment once the secret lands.
-- Status: OPEN
+- Status: DONE
 
 ## FLAG-1 [NON-BLOCKING] Model provider switched by Morty: OpenRouter -> IndieRouter
 - Phase/step: 1

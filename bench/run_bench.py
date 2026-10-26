@@ -106,8 +106,9 @@ def run_row(row: dict, workdir: Path) -> dict:
     if not installed:
         out["status"] = "install_failed"
         return out
-    # test plugins the suite may need (asyncio, httpx, mock...); best-effort
-    sh(f"{vpy} -m pip install -q pytest pytest-asyncio pytest-mock httpx anyio trio", cwd=dest, timeout=600)
+    # test plugins/deps the suite may need; best-effort. openai is REQUIRED: the repo venv runs
+    # `python -m snitch`, which lazily imports openai for LLM calls.
+    sh(f"{vpy} -m pip install -q openai pytest pytest-asyncio pytest-mock pytest-django pytest-xdist httpx anyio trio hypothesis freezegun time-machine responses requests-mock aiosqlite pytest-env djangorestframework django-filter", cwd=dest, timeout=600)
 
     test_cmd = f"{vpy} -m pytest -q -x -p no:cacheprovider"
     rowdir = workdir / f"{dirname}-pr{pr}"

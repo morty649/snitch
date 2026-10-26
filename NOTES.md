@@ -25,6 +25,7 @@ Tuning added: edge-case-only guidance, diversity across lines/categories, 3 shor
 - Demo PR: https://github.com/morty649/snitch-demo/pull/1 (branch refund-store-credit, "fully tested" store-credit tier + weak test)
 - Blocked on FLAG-2: SNITCH_API_KEY secret in snitch-demo settings. Will confirm the Snitch PR comment once it lands.
 - CI check on PR #1 fails with exactly `Missing env vars: SNITCH_API_KEY` (workflow itself is fine).
+- Snitch PR comment LIVE: https://github.com/morty649/snitch-demo/pull/1#issuecomment-6413622196 — trust 50%, 1 of 2 realistic bugs slipped through on the store-credit PR (boundary: day-7 full-refund edge).
 
 ## Phase 7 prep: kill-loop X→Y (Mon Oct 26, copy of shopcalc, classic --per-file 40)
 
