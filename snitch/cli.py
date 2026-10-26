@@ -35,6 +35,7 @@ def build_parser() -> argparse.ArgumentParser:
     r.add_argument("--test-cmd", default=DEFAULT_TEST_CMD)
     r.add_argument("--no-equiv", action="store_true", help="skip the likely-equivalent filter")
     r.add_argument("--kill", action="store_true", help="write + verify a killer test for each survivor")
+    r.add_argument("--write-tests", metavar="DIR", help="save verified killer tests here")
     r.add_argument("--json", metavar="PATH", help="write JSON report")
     r.add_argument("--md", metavar="PATH", help="write Markdown report (PR comment)")
     r.add_argument("--fail-under", type=float, default=None, help="exit 1 if trust score < this (0..1); use as a merge gate")
@@ -85,6 +86,11 @@ def cmd_run(a: argparse.Namespace) -> int:
     if a.kill and llm is not None:
         n = write_killer_tests(llm, repo, results, a.test_cmd, a.timeout)
         print(f"snitch: wrote {n} verified killer test(s).")
+    if a.write_tests:
+        out_dir = Path(a.write_tests); out_dir.mkdir(parents=True, exist_ok=True)
+        for r in results:
+            if r.killer_test:
+                (out_dir / f"test_snitch_{r.mutant.id}.py").write_text(r.killer_test, encoding="utf-8")
 
     print(to_terminal(rep))
     if a.json:
