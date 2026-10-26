@@ -67,7 +67,28 @@ See `.github/workflows/snitch-pr.yml`. Demo: [snitch-demo#1](https://github.com/
 See `bench/RESULTS.md` — 4 real merged copilot-swe-agent PRs: mean LLM trust **0.72** vs classic **0.84**; ≥1 LLM mutant survived in **3 of 4** PRs (33 mutants, 12 survivors).
 
 ## Built with Alan
-*(TODO: screenshots of the Alan workflow / execution trace — see FLAGS.md)*
+
+Snitch was built end to end by an Alan agent (Alan Code · Muse Spark 1.3) working from [`PLAN.md`](PLAN.md): eight phases, a test run after every change, a commit per phase, and a [`FLAGS.md`](FLAGS.md) channel for the few things only the human could do (API key, repo secret, recording the demo).
+
+**1. Working the plan.** Eight phases tracked live; each one ends with tests and a commit.
+
+![Alan's plan view: phases 0–5 done, Phase 6 benchmark running](docs/alan-agent-plan.png)
+
+**2. Shipping the demo.** The agent built the demo repo, wired the GitHub Action and created `snitch-demo` itself with `gh`.
+
+![Alan creating the snitch-demo repo and workflow, 10 files edited](docs/alan-agent-demo-repo.png)
+
+**3. Debugging itself.** When every benchmark LLM run crashed, it found the root cause (per-repo venvs missing `openai`), fixed the runner and relaunched.
+
+![Alan diagnosing and fixing a systematic benchmark-runner bug](docs/alan-agent-self-debug.png)
+
+**4. Honest benchmark.** It vetted real agent-written PRs by cloning, installing and running their tests, and rejected anything that didn't run instead of faking rows.
+
+![Alan vetting candidate PRs: clone, install, run tests, reject](docs/alan-agent-vetting-prs.png)
+
+**5. Hand-off.** Everything pushed, 21 tests green, one flag left for the human: record and submit.
+
+![Alan's final summary: PR comment live, benchmark committed, README pushed](docs/alan-agent-done.png)
 
 ## Limitations
 Python + pytest only · single-line mutants · one repo copy per mutant · equivalence detection is an LLM heuristic.
