@@ -21,3 +21,10 @@ Morty changes `Status: OPEN` to `Status: DONE <answer>`.
 - What I tried: n/a
 - What I'm doing meanwhile: Phase 0 works offline (classic mutator), so I do Phase 0 first.
 - Status: DONE `.env` has SNITCH_BASE_URL=https://openrouter.ai/api/v1 and SNITCH_MODEL=google/gemma-4-31b-it:free. The key is NOT in .env: snitch/llm.py falls back to the OPENROUTER_API_KEY env var exported in Morty's ~/.zshrc. Never print or echo it. If you get 'Missing env vars: SNITCH_API_KEY', your shell didn't load ~/.zshrc: run commands via `zsh -ic '<cmd>'`, or raise a BLOCKING flag. On repeated provider 429s, switch SNITCH_MODEL to poolside/laguna-s-2.1:free and note it in NOTES.md.
+
+## FLAG-1 [NON-BLOCKING] Model provider switched by Morty: OpenRouter -> IndieRouter
+- Phase/step: 1
+- What I need from Morty: nothing, this is an instruction FROM Morty.
+- What I tried: OpenRouter free tier was unreliable.
+- What I'm doing meanwhile: n/a
+- Status: DONE Use .env as it is now: SNITCH_BASE_URL=https://api.indierouter.ai/v1, SNITCH_MODEL=glm-5.3-flash, key read from the INDIEROUTER_API_KEY env var in ~/.zshrc (via SNITCH_API_KEY_ENV). Never print or commit the key. If a run says the key is missing, wrap the command in `zsh -ic '...'`. Discard any OpenRouter results/numbers from before this switch and redo Phase 1 with GLM-5.3 Flash. Record the model in NOTES.md and the README.

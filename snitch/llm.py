@@ -27,11 +27,17 @@ class OpenAICompatLLM:
 
         self.base_url = base_url or os.environ.get("SNITCH_BASE_URL")
         # falls back to OPENROUTER_API_KEY (e.g. exported in ~/.zshrc) so the key never has to live in .env
-        self.api_key = api_key or os.environ.get("SNITCH_API_KEY") or os.environ.get("OPENROUTER_API_KEY")
+        # SNITCH_API_KEY_ENV names ANOTHER env var holding the key (e.g. one exported in ~/.zshrc),
+        # so the key itself never has to be written into .env.
+        key_env = os.environ.get("SNITCH_API_KEY_ENV")
+        if key_env:  # explicit choice: never fall back to another provider's key
+            self.api_key = api_key or os.environ.get("SNITCH_API_KEY") or os.environ.get(key_env)
+        else:
+            self.api_key = api_key or os.environ.get("SNITCH_API_KEY") or os.environ.get("OPENROUTER_API_KEY")
         self.name = model or os.environ.get("SNITCH_MODEL", "")
         missing = [k for k, v in {"SNITCH_BASE_URL": self.base_url, "SNITCH_API_KEY": self.api_key, "SNITCH_MODEL": self.name}.items() if not v]
         if missing:
-            raise RuntimeError(f"Missing env vars: {', '.join(missing)} (the key can also come from OPENROUTER_API_KEY). See README 'Configure a model'.")
+            raise RuntimeError(f"Missing env vars: {', '.join(missing)} (the key can also come from the env var named in SNITCH_API_KEY_ENV, e.g. INDIEROUTER_API_KEY). See README 'Configure a model'.")
         self._client = OpenAI(base_url=self.base_url, api_key=self.api_key, timeout=120)
 
     def complete(self, system: str, user: str, temperature: float = 0.7) -> str:
