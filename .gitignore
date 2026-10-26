@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+bench/.work/
+snitch.json
+snitch.md
+.snitch/
+bench/results.csv

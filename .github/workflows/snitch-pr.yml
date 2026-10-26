@@ -1,0 +1,55 @@
+# Template: copy this into a TARGET repo as .github/workflows/snitch.yml
+# Needs repo secret SNITCH_API_KEY. Set SNITCH_BASE_URL / SNITCH_MODEL below.
+# Posts (and updates) one Snitch PR comment and fails the check if trust < 0.7.
+# Note: PRs from forks get no secrets; demo with a branch in the same repo.
+name: snitch
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  snitch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install project + snitch
+        run: |
+          if [ -f pyproject.toml ] || [ -f setup.py ]; then pip install .; fi
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install pytest "git+https://github.com/morty649/snitch.git"
+      - name: Run snitch on PR diff
+        id: snitch
+        env:
+          SNITCH_BASE_URL: https://api.together.xyz/v1   # TODO set to your provider
+          SNITCH_MODEL: Qwen/Qwen2.5-Coder-32B-Instruct  # TODO set to your model
+          SNITCH_API_KEY: ${{ secrets.SNITCH_API_KEY }}
+        run: |
+          set +e
+          snitch run --diff origin/${{ github.base_ref }} --md snitch.md --json snitch.json --fail-under 0.7
+          echo "exit=$?" >> "$GITHUB_OUTPUT"
+      - name: Comment on PR (create or update)
+        if: always() && hashFiles('snitch.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          PR=${{ github.event.pull_request.number }}
+          (echo '<!-- snitch-report -->'; cat snitch.md) > body.md
+          ID=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq '.[] | select(.body | contains("<!-- snitch-report -->")) | .id' | head -n1)
+          if [ -n "$ID" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$ID" -F body=@body.md
+          else
+            gh pr comment "$PR" --body-file body.md
+          fi
+      - name: Gate
+        if: steps.snitch.outputs.exit != '0'
+        run: exit 1

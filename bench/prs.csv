@@ -1,0 +1,4 @@
+repo_url,pr_number,agent,base_sha,head_sha,pr_says_tested,notes
+# Phase 6: fill 8-10 rows of REAL merged PRs written by coding agents (Copilot coding agent, Codex, Claude Code, Devin...).
+# Requirements per row: Python repo, pytest suite that runs in < 60s with `pip install -e .` (or requirements.txt), PR changes non-test .py files.
+# pr_says_tested = yes if the PR description claims tests were added/pass.
