@@ -9,6 +9,14 @@ off-by-one, < vs <=, wrong boundary, swapped arguments, inverted condition, miss
 wrong default, rounding/truncation error, wrong variable, early return, dropped edge case.
 Never write obviously silly bugs (e.g. `return None` everywhere, deleting whole functions, syntax errors).
 Each bug changes EXACTLY ONE line. The changed line must still be valid Python with the same indentation.
+Each bug should only show up for SOME inputs (an edge case), not break everything — a bug that breaks
+every input is too easy to catch and not realistic.
+Spread your mutants across different lines and different bug categories; do not repeat the same kind of
+change twice.
+Examples of good realistic bugs:
+- `if quantity >= 10:` -> `if quantity > 10:` (boundary: exactly-10 orders silently lose the discount)
+- `return round(paid / 2, 2)` -> `return round(paid / 3, 2)` (wrong divisor: half-refunds come out wrong)
+- `if not code:` -> `if code is None:` (empty-string coupon now crashes instead of being ignored)
 Reply with ONLY a JSON array, no prose."""
 
 MUTATE_USER = """File: {file}
