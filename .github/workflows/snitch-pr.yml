@@ -30,8 +30,8 @@ jobs:
       - name: Run snitch on PR diff
         id: snitch
         env:
-          SNITCH_BASE_URL: https://api.together.xyz/v1   # TODO set to your provider
-          SNITCH_MODEL: Qwen/Qwen2.5-Coder-32B-Instruct  # TODO set to your model
+          SNITCH_BASE_URL: https://api.indierouter.ai/v1
+          SNITCH_MODEL: glm-5.3-flash
           SNITCH_API_KEY: ${{ secrets.SNITCH_API_KEY }}
         run: |
           set +e
